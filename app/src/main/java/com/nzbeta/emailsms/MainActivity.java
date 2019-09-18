@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "SMS2Gmail";
+    private static final String TAG = "EmailSMS";
 
     Activity activity = MainActivity.this;
     private Button btnRun;

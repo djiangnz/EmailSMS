@@ -31,12 +31,12 @@ public class MailUtil {
     }
 
     public void sendTo1(String message, String subject) {
-        Log.i(TAG, email + " " + passwd + " " + host + " " + port + " " + to1 + " " + message + subject);
+        Log.i(TAG, email + " " + passwd + " " + host + " " + port + " " + to1 + " " + message + " " + subject);
         new MailAsyncTask(email, passwd, host, port, to1, message, subject).execute();
     }
 
     public void sendTo2(String message, String subject) {
-        Log.i(TAG, email + " " + passwd + " " + host + " " + port + " " + to1 + " " + message + subject);
+        Log.i(TAG, email + " " + passwd + " " + host + " " + port + " " + to1 + " " + message + " " + subject);
         new MailAsyncTask(email, passwd, host, port, to2, message, subject).execute();
     }
 }
