@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name" translatable="false">EmailSMS</string>
+    <string name="from_email">from email:</string>
+    <string name="from_passwd">email passwd:</string>
+    <string name="to1">same as from</string>
+    <string name="to2">same as from</string>
+    <string name="from_host">smtp.gmail.com</string>
+    <string name="from_port">465</string>
+    <string name="label_from">from:</string>
+    <string name="label_host">host:</string>
+    <string name="label_port">ssl port:</string>
+    <string name="label_passwd">password:</string>
+    <string name="label_to1">forward SIM1 to:</string>
+    <string name="label_to2">forward SIM2 to:</string>
+    <string name="button_run">run</string>
+    <string name="run">run</string>
+    <string name="stop">stop</string>
+</resources>
