@@ -25,12 +25,12 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
             SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
             String sender = smsMessage.getDisplayOriginatingAddress();
             String subject = "SMS from: " + sender;
-            String messageBody = smsMessage.getMessageBody();
-            Log.i(TAG, "slot: " + slot + "\n  " + sender + "\n  " + messageBody);
+            String content = smsMessage.getMessageBody().replaceAll("https?://\\S+\\s?", "");
+            Log.i(TAG, "slot: " + slot + "\n  " + sender + "\n  " + content);
             if (slot == 0) {
-                mailUtil.sendTo1(subject, messageBody);
+                mailUtil.sendTo1(subject, content);
             } else {
-                mailUtil.sendTo2(subject, messageBody);
+                mailUtil.sendTo2(subject, content);
             }
         }
     }

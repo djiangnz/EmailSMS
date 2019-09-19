@@ -131,6 +131,11 @@ public class MainActivity extends AppCompatActivity {
         }
         btnRun.setText("STOP");
         mailUtil.init(email, password, host, port, to1Addr, to2Addr);
+
+        mailUtil.sendTo1("Test Subject", "Hello World");
+        if (!to2Addr.equals(to1Addr)) {
+            mailUtil.sendTo2("Test Subject", "Hello World");
+        }
     }
 
     private void clearFocus() {
