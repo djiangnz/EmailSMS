@@ -122,11 +122,11 @@ public class MainActivity extends AppCompatActivity {
         serviceRunning = !serviceRunning;
         if (!serviceRunning) {
             btnRun.setText("RUN");
+            mailUtil.stop();
             return;
         }
         btnRun.setText("STOP");
         mailUtil.init(email, password, host, port, to1Addr, to2Addr);
-        mailUtil.sendTo1("Test Subject", "Test Content");
     }
 
     private void clearFocus() {

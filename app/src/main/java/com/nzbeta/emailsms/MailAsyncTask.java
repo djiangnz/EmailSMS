@@ -42,13 +42,13 @@ public class MailAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        Log.i(TAG, "Message sending");
+        Log.i(TAG, "Sending " + message);
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        Log.i(TAG, "Message Sent");
+        Log.i(TAG, "Message sent");
     }
 
     @Override
@@ -56,7 +56,6 @@ public class MailAsyncTask extends AsyncTask<Void, Void, Void> {
         //Creating properties
         Properties props = new Properties();
         //Configuring properties for gmail
-        //If you are not using gmail you may need to change the values
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.socketFactory.port", port);
         props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
