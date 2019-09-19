@@ -24,12 +24,13 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
         for (int i = 0; i < pdus.length; i++) {
             SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
             String sender = smsMessage.getDisplayOriginatingAddress();
+            String subject = "SMS from: " + sender;
             String messageBody = smsMessage.getMessageBody();
             Log.i(TAG, "slot: " + slot + "\n  " + sender + "\n  " + messageBody);
             if (slot == 0) {
-                mailUtil.sendTo1(sender, messageBody);
+                mailUtil.sendTo1(subject, messageBody);
             } else {
-                mailUtil.sendTo2(sender, messageBody);
+                mailUtil.sendTo2(subject, messageBody);
             }
         }
     }

@@ -39,7 +39,7 @@ public class MailUtil {
     }
 
     public boolean isRunning() {
-        Log.i(TAG, "is running " + this.running);
+//        Log.i(TAG, "is running " + this.running);
         return this.running;
     }
 
