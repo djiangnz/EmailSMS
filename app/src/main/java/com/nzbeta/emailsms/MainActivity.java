@@ -1,29 +1,24 @@
 package com.nzbeta.emailsms;
 
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+
     private static final String TAG = "EmailSMS";
 
-    Activity activity = MainActivity.this;
     private Button btnRun;
     private EditText fromEmail;
     private EditText fromPasswd;
@@ -40,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SIMInfo simInfo = SIMInfo.getInstance(this);
-
         fromEmail = findViewById(R.id.fromEmail);
         fromPasswd = findViewById(R.id.fromPasswd);
         fromHost = findViewById(R.id.fromHost);
@@ -50,11 +43,6 @@ public class MainActivity extends AppCompatActivity {
         to2 = findViewById(R.id.to2);
         btnRun = findViewById(R.id.run);
         sp = getSharedPreferences("com.nzbeta.emailsms", MODE_PRIVATE);
-
-        if (simInfo.isDualSIM()) {
-            findViewById(R.id.label_to2).setVisibility(View.VISIBLE);
-            to2.setVisibility(View.VISIBLE);
-        }
 
         int currentUid = android.os.Process.myUid();
         serviceRunning = isServiceRunning(currentUid);
@@ -67,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadConfig() {
+        boolean firstblood = sp.getBoolean("firstblood", true);
+        if (firstblood) {
+            alert("SMS permission is required");
+        }
         String storedEmail = sp.getString("fromEmail", "");
         String storedPasswd = sp.getString("fromPasswd", "");
         String storedHose = sp.getString("fromHost", "");
@@ -83,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveConfig() {
         SharedPreferences.Editor prefEditor = sp.edit();
+        prefEditor.putBoolean("firstblood", false);
         prefEditor.putString("fromEmail", fromEmail.getText().toString());
         prefEditor.putString("fromPasswd", fromPasswd.getText().toString());
         prefEditor.putString("fromHost", fromHost.getText().toString());
@@ -132,9 +125,9 @@ public class MainActivity extends AppCompatActivity {
         btnRun.setText("STOP");
         mailUtil.init(email, password, host, port, to1Addr, to2Addr);
 
-        mailUtil.sendTo1("Test Subject", "Hello World");
+        mailUtil.sendTo1("SMS from: Test", "Hello World");
         if (!to2Addr.equals(to1Addr)) {
-            mailUtil.sendTo2("Test Subject", "Hello World");
+            mailUtil.sendTo2("SMS from: Test", "Hello World");
         }
     }
 
@@ -147,18 +140,6 @@ public class MainActivity extends AppCompatActivity {
         to2.clearFocus();
     }
 
-    private Map getContacts() {
-        Map<String, String> contacts = new HashMap<>();
-        Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        while (phones.moveToNext()) {
-            String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            contacts.put(name, phoneNumber);
-        }
-        phones.close();
-        return contacts;
-    }
-
     public void alert(String msg) {
         new AlertDialog.Builder(this)
                 .setTitle("Alert")
@@ -167,8 +148,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 })
-                .setNegativeButton(android.R.string.no, null)
-//                .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
 }

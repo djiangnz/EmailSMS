@@ -10,8 +10,8 @@
     <string name="label_host">host:</string>
     <string name="label_port">ssl port:</string>
     <string name="label_passwd">password:</string>
-    <string name="label_to1">forward SIM1 to:</string>
-    <string name="label_to2">forward SIM2 to:</string>
+    <string name="label_to1">email SIM1 to:</string>
+    <string name="label_to2">email SIM2 to: (if applicable)</string>
     <string name="button_run">run</string>
     <string name="run">run</string>
     <string name="stop">stop</string>

@@ -1,8 +1,6 @@
 package com.nzbeta.emailsms;
 
 
-import android.util.Log;
-
 // https://www.callicoder.com/java-singleton-design-pattern-example/
 public class MailUtil {
     private static final String TAG = "EmailSMS";
@@ -39,19 +37,16 @@ public class MailUtil {
     }
 
     public boolean isRunning() {
-//        Log.i(TAG, "is running " + this.running);
         return this.running;
     }
 
     public void sendTo1(String message, String subject) {
         if (!isRunning()) return;
-//        Log.i(TAG, email + " " + passwd + " " + host + " " + port + " " + to1 + " " + message + " " + subject);
         new MailAsyncTask(email, passwd, host, port, to1, message, subject).execute();
     }
 
     public void sendTo2(String message, String subject) {
         if (!isRunning()) return;
-//        Log.i(TAG, email + " " + passwd + " " + host + " " + port + " " + to1 + " " + message + " " + subject);
         new MailAsyncTask(email, passwd, host, port, to2, message, subject).execute();
     }
 }

@@ -53,8 +53,7 @@
         android:hint="@string/from_host"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fromPasswd"
-        tools:text="@string/from_host" />
+        app:layout_constraintTop_toBottomOf="@+id/fromPasswd" />
 
     <TextView
         android:id="@+id/label_port"
@@ -132,7 +131,6 @@
         android:layout_height="wrap_content"
         android:text="@string/label_to2"
         android:textSize="12sp"
-        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/to2"
         app:layout_constraintStart_toStartOf="@+id/to2" />
 
@@ -146,7 +144,6 @@
         android:ems="10"
         android:hint="@string/to2"
         android:inputType="textEmailAddress"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
