@@ -7,14 +7,18 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "EmailSMS";
@@ -136,6 +140,18 @@ public class MainActivity extends AppCompatActivity {
         fromPasswd.clearFocus();
         to1.clearFocus();
         to2.clearFocus();
+    }
+
+    private Map getContacts() {
+        Map<String, String> contacts = new HashMap<>();
+        Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        while (phones.moveToNext()) {
+            String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            contacts.put(name, phoneNumber);
+        }
+        phones.close();
+        return contacts;
     }
 
     public void alert(String msg) {
