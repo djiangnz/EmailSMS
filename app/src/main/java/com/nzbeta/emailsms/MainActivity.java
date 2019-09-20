@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private void loadConfig() {
         boolean firstblood = sp.getBoolean("firstblood", true);
         if (firstblood) {
-            alert("SMS permission is required");
+            alert("Please go to Settings to grant SMS permission");
         }
         String storedEmail = sp.getString("fromEmail", "");
         String storedPasswd = sp.getString("fromPasswd", "");
