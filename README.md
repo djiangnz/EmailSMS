@@ -13,3 +13,9 @@
 ![screenshot](screenshot1.png)
 
 
+## TODO
+1. Manage App Status
+1. [Monitor the Battery Level](https://developer.android.com/training/monitoring-device-state/battery-monitoring)
+1. Read Contacts
+1. Email Missed Calls
+1. Filter Msg
