@@ -1,5 +1,5 @@
 # EmailSMS
-
+[![HitCount](http://hits.dwyl.com/dianyij/EmailSMS.svg)](http://hits.dwyl.com/dianyij/EmailSMS)
 ## usage
 1. Install the app and run
 2. Grant permissions in the Settings MANUALLY
