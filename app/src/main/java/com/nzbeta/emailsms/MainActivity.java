@@ -1,24 +1,31 @@
 package com.nzbeta.emailsms;
 
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.CallLog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "EmailSMS";
-
+    private static final String smsIntent = "com.nzbeta.emailsms.SmsBroadcastReceiver";
     private Button btnRun;
     private EditText fromEmail;
     private EditText fromPasswd;
@@ -39,20 +46,20 @@ public class MainActivity extends AppCompatActivity {
         fromPasswd = findViewById(R.id.fromPasswd);
         fromHost = findViewById(R.id.fromHost);
         fromPort = findViewById(R.id.fromPort);
+
         to1 = findViewById(R.id.to1);
         to2 = findViewById(R.id.to2);
         btnRun = findViewById(R.id.run);
+        btnRun.setText("START");
         sp = getSharedPreferences("com.nzbeta.emailsms", MODE_PRIVATE);
-
-        int currentUid = android.os.Process.myUid();
-        serviceRunning = isServiceRunning(currentUid);
-        if (serviceRunning) {
-            btnRun.setText("STOP");
-        } else {
-            btnRun.setText("RUN");
-        }
         loadConfig();
     }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        loadConfig();
+//    }
 
     private void loadConfig() {
         boolean firstblood = sp.getBoolean("firstblood", true);
@@ -85,17 +92,6 @@ public class MainActivity extends AppCompatActivity {
         prefEditor.apply();
     }
 
-    private boolean isServiceRunning(int uid) {
-        List<ActivityManager.RunningServiceInfo> serviceList = ((ActivityManager) getSystemService
-                (Context.ACTIVITY_SERVICE)).getRunningServices(Integer.MAX_VALUE);
-        for (ActivityManager.RunningServiceInfo info : serviceList) {
-            if (info.uid == uid) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void run(View view) {
         saveConfig();
 
@@ -118,17 +114,55 @@ public class MainActivity extends AppCompatActivity {
 
         serviceRunning = !serviceRunning;
         if (!serviceRunning) {
-            btnRun.setText("RUN");
+            Intent intent = new Intent(MainActivity.this, SmsBroadcastReceiver.class);
+            startService(intent);
+            btnRun.setText("START");
             mailUtil.stop();
             return;
         }
         btnRun.setText("STOP");
+//        getCallDetails();
         mailUtil.init(email, password, host, port, to1Addr, to2Addr);
-
         mailUtil.sendTo1("SMS from: Test", "Hello World");
         if (!to2Addr.equals(to1Addr)) {
             mailUtil.sendTo2("SMS from: Test", "Hello World");
         }
+    }
+
+    private void getCallDetails() {
+        StringBuffer sb = new StringBuffer();
+        Cursor managedCursor = managedQuery(CallLog.Calls.CONTENT_URI, null, null, null, null);
+        managedCursor.moveToLast();
+        int number = managedCursor.getColumnIndex(CallLog.Calls.NUMBER);
+        int type = managedCursor.getColumnIndex(CallLog.Calls.TYPE);
+        int date = managedCursor.getColumnIndex(CallLog.Calls.DATE);
+        int duration = managedCursor.getColumnIndex(CallLog.Calls.DURATION);
+        sb.append("Call Log :");
+//        while (managedCursor.moveToNext()) {
+            String phNumber = managedCursor.getString(number);
+            String callType = managedCursor.getString(type);
+            String callDate = managedCursor.getString(date);
+            Date callDayTime = new Date(Long.valueOf(callDate));
+            String callDuration = managedCursor.getString(duration);
+            String dir = null;
+            int dircode = Integer.parseInt(callType);
+            switch (dircode) {
+                case CallLog.Calls.OUTGOING_TYPE:
+                    dir = "OUTGOING";
+                    break;
+                case CallLog.Calls.INCOMING_TYPE:
+                    dir = "INCOMING";
+                    break;
+                case CallLog.Calls.MISSED_TYPE:
+                    dir = "MISSED";
+                    break;
+            }
+            sb.append("\nPhone Number:--- " + phNumber + " \nCall Type:--- " + dir + " \nCall Date:--- " + callDayTime + " \nCall duration in sec :--- " + callDuration);
+            sb.append("\n----------------------------------");
+//        }
+        managedCursor.close();
+        System.out.println(sb);
+
     }
 
     private void clearFocus() {

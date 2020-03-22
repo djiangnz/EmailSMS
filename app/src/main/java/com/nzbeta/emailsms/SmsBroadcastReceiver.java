@@ -18,11 +18,14 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         Bundle bundle = intent.getExtras();
+        if (bundle == null) return;
+
         int slot = bundle.getInt("slot", -1);
         Object[] pdus = (Object[]) bundle.get("pdus");
         String subject = "SMS from: ";
         String sender = "";
         String content = "";
+        Log.i(TAG, "INCOMING MSG");
 
         if (pdus == null) return;
         for (int i = 0; i < pdus.length; i++) {
